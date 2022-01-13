@@ -2,6 +2,8 @@ package com.runchen.android.native_runchen.devices;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.agee.serialporthelper.PortData;
 import org.agee.serialporthelper.SerialPortConfig;
 import org.agee.serialporthelper.SerialPortHelper;
@@ -121,7 +123,8 @@ public class SerialPortManage {
                     body.put("data", data.getCommandsHex());
                     Log.i(TAG, body.toString());
                     if (eventSink != null) {
-                        eventSink.success(body);
+                        Gson gson = new Gson();
+                        eventSink.success(gson.toJson(body));
                     }
                 }
 

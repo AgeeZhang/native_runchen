@@ -17,14 +17,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  String _deviceName = '';
-  String _baudRate = '9600';
+  String _deviceName = '/dev/ttyS4';
+  String _baudRate = '57600';
+  String _sendData = 'EF01FFFFFFFF010003350039';
+  String _message = '';
   String _i2cDeviceName = '';
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    _onReceiveEventData();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -46,6 +49,16 @@ class _MyAppState extends State<MyApp> {
 
     setState(() {
       _platformVersion = platformVersion;
+    });
+  }
+
+  void _onReceiveEventData() {
+    NativeRunchen.onListenStreamData((data) {
+      setState(() {
+          _message = data;
+      });
+    }, (error) {
+      print("event channel error : $error");
     });
   }
 
@@ -141,6 +154,54 @@ class _MyAppState extends State<MyApp> {
                 setState(() { });
               }
             ),
+            TextField(
+              style: const TextStyle(color: Color(0xFFA7ABBB),fontSize: 15),
+              controller: TextEditingController.fromValue(TextEditingValue(
+                  text: _sendData,
+                  selection: TextSelection.fromPosition(TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: _sendData.length)
+                  ))
+              ),
+              decoration: InputDecoration(
+                counterText: '',
+                filled: true,
+                fillColor: Color(0xFF1A1A1A),
+                hintStyle: const TextStyle(color: Color(0xFFA7ABBB),fontSize: 15),
+                hintText: '请输入发送内容',
+                contentPadding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(6),borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(6),borderSide: BorderSide.none),
+              ),
+              onChanged: (v){
+                _sendData = v;
+                setState(() { });
+              }
+            ),
+            TextField(
+              style: const TextStyle(color: Color(0xFFA7ABBB),fontSize: 15),
+              controller: TextEditingController.fromValue(TextEditingValue(
+                  text: _message,
+                  selection: TextSelection.fromPosition(TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: _message.length)
+                  ))
+              ),
+              decoration: InputDecoration(
+                counterText: '',
+                filled: true,
+                fillColor: Color(0xFF1A1A1A),
+                hintStyle: const TextStyle(color: Color(0xFFA7ABBB),fontSize: 15),
+                hintText: '读取内容',
+                contentPadding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(6),borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(6),borderSide: BorderSide.none),
+              ),
+              onChanged: (v){
+                _message = v;
+                setState(() { });
+              }
+            ),
             Row(
               crossAxisAlignment:CrossAxisAlignment.center,
               mainAxisAlignment:MainAxisAlignment.spaceAround,
@@ -158,6 +219,13 @@ class _MyAppState extends State<MyApp> {
                 child: new Text('关闭串口'),
                 onPressed: (){
                     NativeRunchen.closeSerialPort(_deviceName);
+                }),
+                MaterialButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: new Text('发送数据'),
+                onPressed: (){
+                    NativeRunchen.serialPortSend(_deviceName,_sendData);
                 })
               ],
             ),

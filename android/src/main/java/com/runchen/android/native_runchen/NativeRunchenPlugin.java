@@ -74,13 +74,13 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
             String data = call.argument("data");
             I2CManage.getInstance().write(fileName, data);
         } else if (call.method.equals("serialPort.open")) {
-            int mode = call.argument("mode");
+//            int mode = call.argument("mode");
             String fileName = call.argument("fileName");
             int baudRate = Integer.valueOf(call.argument("baudRate"));
             int dataBits = call.argument("dataBits");
-            char parity = call.argument("parity");
+            String parity = call.argument("parity");
             int stopBits = call.argument("stopBits");
-            SerialPortManage.getInstance().openSerialPort(mode, fileName, baudRate, dataBits, parity, stopBits);
+            SerialPortManage.getInstance().openSerialPort(0, fileName, baudRate, dataBits, parity.charAt(0), stopBits);
         } else if (call.method.equals("serialPort.sendData")) {
             String fileName = call.argument("fileName");
             String data = call.argument("data");
