@@ -12,7 +12,7 @@ public class AudioHelper {
     private Context context;
     private int VOICE_STEP = 2;
 
-    private AudioHelper(){
+    private AudioHelper() {
 
     }
 
@@ -31,8 +31,8 @@ public class AudioHelper {
         return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
-    public void init(Context context){
-        if(mAudioManager == null) {
+    public void init(Context context) {
+        if (mAudioManager == null) {
             mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         }
         this.context = context;
@@ -42,12 +42,12 @@ public class AudioHelper {
         VOICE_STEP = step;
     }
 
-    public int getVolume(){
-        return 100*getSystemCurrentVolume()/getSystemMaxVolume();
+    public int getVolume() {
+        return 100 * getSystemCurrentVolume() / getSystemMaxVolume();
     }
 
-    public int setVolume(int num){
-        if(mAudioManager!=null) {
+    public int setVolume(int num) {
+        if (mAudioManager != null) {
             int a = (int) Math.ceil((num) * getSystemMaxVolume() * 0.01);
             a = a <= 0 ? 0 : a;
             a = a >= 100 ? 100 : a;
@@ -57,8 +57,8 @@ public class AudioHelper {
         return 0;
     }
 
-    public int volumeUp(){
-        if(mAudioManager !=null) {
+    public int volumeUp() {
+        if (mAudioManager != null) {
             int a = (int) Math.ceil((VOICE_STEP + getVolume()) * getSystemMaxVolume() * 0.01);
             a = a <= 0 ? 0 : a;
             a = a >= 100 ? 100 : a;
@@ -68,8 +68,8 @@ public class AudioHelper {
         return 0;
     }
 
-    public int volumeDown(){
-        if(mAudioManager!=null) {
+    public int volumeDown() {
+        if (mAudioManager != null) {
             int a = (int) Math.floor((getVolume() - VOICE_STEP) * getSystemMaxVolume() * 0.01);
             a = a <= 0 ? 0 : a;
             a = a >= 100 ? 100 : a;
@@ -79,19 +79,21 @@ public class AudioHelper {
         return 0;
     }
 
-    public void muteOn(){
-        if(mAudioManager!=null){
-            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-            mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-            Log.i(TAG,"开启静音");
+    public void muteOn() {
+        if (mAudioManager != null) {
+            mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0);
+//            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+//            mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            Log.i(TAG, "开启静音");
         }
     }
 
-    public void muteOff(){
-        if(mAudioManager!=null){
-            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-            mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-            Log.i(TAG,"取消静音");
+    public void muteOff() {
+        if (mAudioManager != null) {
+            mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0);
+//            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+//            mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            Log.i(TAG, "取消静音");
         }
     }
 }

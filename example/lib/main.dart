@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _deviceName = '/dev/ttyS4';
   String _baudRate = '57600';
-  String _sendData = 'EF01FFFFFFFF010003350039';
+  String _sendData = 'EF01FFFFFFFF01000831000103004A0088';
   String _message = '';
   String _i2cDeviceName = '';
 
@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
                 textColor: Colors.white,
                 child: new Text('音量减'),
                 onPressed: (){
-                    NativeRunchen.showMessage("test");
+                    NativeRunchen.volumeDown;
                 }),
                 MaterialButton(
                 color: Colors.blue,
@@ -270,6 +270,40 @@ class _MyAppState extends State<MyApp> {
                 child: new Text('设备读取'),
                 onPressed: (){
                      NativeRunchen.i2cRead(_i2cDeviceName, 1);
+                })
+              ],
+            ),
+            Row(
+              crossAxisAlignment:CrossAxisAlignment.center,
+              mainAxisAlignment:MainAxisAlignment.spaceAround,
+              children: [
+                MaterialButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: new Text('USB串口配置'),
+                onPressed: (){
+                    NativeRunchen.usb2SerialPortSetConfig("57600","8","1" ,"0");
+                }),
+                MaterialButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: new Text('USB串口打开'),
+                onPressed: (){
+                     NativeRunchen.usb2SerialPortOpenDevice;
+                }),
+                MaterialButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: new Text('USB串口关闭'),
+                onPressed: (){
+                     NativeRunchen.usb2SerialPortCloseDevice;
+                }),
+                MaterialButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: new Text('USB串口发送数据'),
+                onPressed: (){
+                     NativeRunchen.usb2SerialPortWriteData(_sendData);
                 })
               ],
             )

@@ -21,7 +21,7 @@ class NativeRunchen {
 
   // 获取当前设备音量
   static Future<int?> get getVolume async {
-    final int? volume = await _methodchannel.invokeMethod('getVolume');
+    final int? volume = await _methodchannel.invokeMethod('audio.getVolume');
     return volume;
   }
 
@@ -91,12 +91,47 @@ class NativeRunchen {
 
   // 向串口发送数据
   static Future<dynamic> serialPortSend(String? fileName, String? data) async {
-    _methodchannel.invokeMethod('serialPort.sendData', {"fileName": fileName, "data": data});
+    _methodchannel.invokeMethod(
+        'serialPort.sendData', {"fileName": fileName, "data": data});
+  }
+
+  // USB转串口配置（先配置再打开
+  static Future<bool?> usb2SerialPortSetConfig(String? baudRate,
+      String? dataBit, String? stopBits, String? parity) async {
+    final bool? success = await _methodchannel.invokeMethod(
+        'usb2SerialPort.setConfig', {
+      "baudRate": baudRate,
+      "dataBit": dataBit,
+      "stopBits": stopBits,
+      "parity": parity
+    });
+    return success;
+  }
+
+  // USB转串口打开串口
+  static Future<bool?> get usb2SerialPortOpenDevice async {
+    final bool? success =
+        await _methodchannel.invokeMethod('usb2SerialPort.openDevice');
+    return success;
+  }
+
+  // USB转串口关闭串口
+  static Future<bool?> get usb2SerialPortCloseDevice async {
+    final bool? success =
+        await _methodchannel.invokeMethod('usb2SerialPort.closeDevice');
+    return success;
+  }
+
+  // USB转串口发送数据
+  static Future<bool?> usb2SerialPortWriteData(String? text) async {
+    final bool? success = await _methodchannel
+        .invokeMethod('usb2SerialPort.writeData', {"text": text});
+    return success;
   }
 
   //用于接收改插件的所有事件消息
   //数据格式json
-  //type 通讯类型
+  //type 通讯类型  serialPort(串口)  USB2SerialPort(usb转串口工具)
   //device 设备名称
   //data  数据体
   static void onListenStreamData(onEvent, onError) {

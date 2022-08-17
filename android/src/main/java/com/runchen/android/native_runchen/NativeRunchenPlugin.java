@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.runchen.android.native_runchen.devices.I2CManage;
 import com.runchen.android.native_runchen.devices.SerialPortManage;
+import com.runchen.android.native_runchen.devices.USB2SerialPortManage;
 import com.runchen.android.native_runchen.helper.AudioHelper;
 import com.runchen.android.native_runchen.helper.ToastHelper;
 
@@ -30,6 +31,8 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         AudioHelper.getInstance().init(flutterPluginBinding.getApplicationContext());
         ToastHelper.getInstance().init(flutterPluginBinding.getApplicationContext());
+        USB2SerialPortManage.getInstance().initDriver(flutterPluginBinding.getApplicationContext());
+
         methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "native_runchen");
         methodChannel.setMethodCallHandler(this);
 
@@ -88,6 +91,23 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
         } else if (call.method.equals("serialPort.close")) {
             String fileName = call.argument("fileName");
             SerialPortManage.getInstance().close(fileName);
+        } else if (call.method.equals("usb2SerialPort.setConfig")) {
+            int baudRate = Integer.valueOf(call.argument("baudRate"));
+            byte dataBits = Byte.valueOf(call.argument("dataBit"));
+            byte stopBits = Byte.valueOf(call.argument("stopBits"));
+            byte parity = Byte.valueOf(call.argument("parity"));
+            boolean success = USB2SerialPortManage.getInstance().setConfig(baudRate, dataBits, stopBits, parity, (byte) 0);
+            result.success(success);
+        } else if (call.method.equals("usb2SerialPort.openDevice")) {
+            boolean success = USB2SerialPortManage.getInstance().openDevice();
+            result.success(success);
+        } else if (call.method.equals("usb2SerialPort.closeDevice")) {
+            boolean success = USB2SerialPortManage.getInstance().closeDevice();
+            result.success(success);
+        } else if (call.method.equals("usb2SerialPort.writeData")) {
+            String text = call.argument("text");
+            boolean success = USB2SerialPortManage.getInstance().writeData(text);
+            result.success(success);
         } else {
             result.notImplemented();
         }
@@ -102,12 +122,14 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
     public void onListen(Object arguments, EventChannel.EventSink events) {
         eventSink = events;
         SerialPortManage.getInstance().onListen(this.eventSink);
+        USB2SerialPortManage.getInstance().onListen(this.eventSink);
     }
 
     @Override
     public void onCancel(Object arguments) {
         eventSink = null;
         SerialPortManage.getInstance().onListen(null);
+        USB2SerialPortManage.getInstance().onListen(null);
     }
 
 }

@@ -1,6 +1,6 @@
 name: native_runchen
 description: Flutter与Android原生层交互的插件，内容还在持续扩展中.
-version: 0.0.4
+version: 0.0.7
 homepage: https://github.com/AgeeZhang/native_runchen.git
 
 environment:

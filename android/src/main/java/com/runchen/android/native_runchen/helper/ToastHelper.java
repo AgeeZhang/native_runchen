@@ -5,11 +5,11 @@ import android.widget.Toast;
 
 public class ToastHelper {
 
-    private final String TAG = "ToastUtil";
+    private final String TAG = getClass().getSimpleName();
     private volatile static ToastHelper instance;
     private Context context;
 
-    private ToastHelper(){
+    private ToastHelper() {
 
     }
 
@@ -20,11 +20,11 @@ public class ToastHelper {
         return instance;
     }
 
-    public void init(Context context){
+    public void init(Context context) {
         this.context = context;
     }
 
-    public void showMessage(String message){
-        Toast.makeText(context,message,Toast.LENGTH_LONG).show();
+    public void showMessage(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }

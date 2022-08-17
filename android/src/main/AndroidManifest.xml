@@ -2,4 +2,5 @@
   package="com.runchen.android.native_runchen">
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="com.google.android.things.permission.USE_PERIPHERAL_IO" />
+    <uses-feature android:name="android.hardware.usb.host" />
 </manifest>
