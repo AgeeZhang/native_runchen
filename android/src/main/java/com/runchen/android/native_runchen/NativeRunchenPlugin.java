@@ -6,6 +6,7 @@ import com.runchen.android.native_runchen.devices.I2CManage;
 import com.runchen.android.native_runchen.devices.SerialPortManage;
 import com.runchen.android.native_runchen.devices.USB2SerialPortManage;
 import com.runchen.android.native_runchen.helper.AudioHelper;
+import com.runchen.android.native_runchen.helper.AppHelper;
 import com.runchen.android.native_runchen.helper.ToastHelper;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -31,6 +32,7 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         AudioHelper.getInstance().init(flutterPluginBinding.getApplicationContext());
         ToastHelper.getInstance().init(flutterPluginBinding.getApplicationContext());
+        AppHelper.getInstance().init(flutterPluginBinding.getApplicationContext());
         USB2SerialPortManage.getInstance().initDriver(flutterPluginBinding.getApplicationContext());
 
         methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "native_runchen");
@@ -107,6 +109,9 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
         } else if (call.method.equals("usb2SerialPort.writeData")) {
             String text = call.argument("text");
             boolean success = USB2SerialPortManage.getInstance().writeData(text);
+            result.success(success);
+        } else if (call.method.equals("openAppToFront")) {
+            boolean success = AppHelper.getInstance().openAppToFront();
             result.success(success);
         } else {
             result.notImplemented();

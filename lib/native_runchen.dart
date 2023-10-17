@@ -129,6 +129,12 @@ class NativeRunchen {
     return success;
   }
 
+  // 唤起APP到前台
+  static Future<bool?> get openAppToFront async {
+    final bool? success = await _methodchannel.invokeMethod('openAppToFront');
+    return success;
+  }
+
   //用于接收改插件的所有事件消息
   //数据格式json
   //type 通讯类型  serialPort(串口)  USB2SerialPort(usb转串口工具)
