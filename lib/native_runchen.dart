@@ -135,9 +135,21 @@ class NativeRunchen {
     return success;
   }
 
+  // RFID-USB转串口开启串口
+  static Future<bool?> get RFIDOpen async {
+    final bool? success = await _methodchannel.invokeMethod('RFID.openAndroidUsbSerial');
+    return success;
+  }
+
+  // RFID-USB转串口关闭串口
+  static Future<bool?> get RFIDClose async {
+    final bool? success = await _methodchannel.invokeMethod('RFID.close');
+    return success;
+  }
+
   //用于接收改插件的所有事件消息
   //数据格式json
-  //type 通讯类型  serialPort(串口)  USB2SerialPort(usb转串口工具)
+  //type 通讯类型  serialPort(串口)  USB2SerialPort(usb转串口工具)  RFID(RFID)
   //device 设备名称
   //data  数据体
   static void onListenStreamData(onEvent, onError) {

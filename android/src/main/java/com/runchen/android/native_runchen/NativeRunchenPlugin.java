@@ -3,6 +3,7 @@ package com.runchen.android.native_runchen;
 import androidx.annotation.NonNull;
 
 import com.runchen.android.native_runchen.devices.I2CManage;
+import com.runchen.android.native_runchen.devices.RFIDManage;
 import com.runchen.android.native_runchen.devices.SerialPortManage;
 import com.runchen.android.native_runchen.devices.USB2SerialPortManage;
 import com.runchen.android.native_runchen.helper.AudioHelper;
@@ -113,6 +114,12 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
         } else if (call.method.equals("openAppToFront")) {
             boolean success = AppHelper.getInstance().openAppToFront();
             result.success(success);
+        } else if (call.method.equals("RFID.openAndroidUsbSerial")) {
+            boolean success = RFIDManage.getInstance().openAndroidUsbSerial(AppHelper.getInstance().getContext());
+            result.success(success);
+        } else if (call.method.equals("RFID.close")) {
+            RFIDManage.getInstance().close();
+            result.success(true);
         } else {
             result.notImplemented();
         }
@@ -128,6 +135,7 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
         eventSink = events;
         SerialPortManage.getInstance().onListen(this.eventSink);
         USB2SerialPortManage.getInstance().onListen(this.eventSink);
+        RFIDManage.getInstance().onListen(this.eventSink);
     }
 
     @Override
@@ -135,6 +143,7 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
         eventSink = null;
         SerialPortManage.getInstance().onListen(null);
         USB2SerialPortManage.getInstance().onListen(null);
+        RFIDManage.getInstance().onListen(null);
     }
 
 }

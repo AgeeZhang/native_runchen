@@ -28,6 +28,10 @@ public class AppHelper {
         this.context = context;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public boolean openAppToFront() {
         String packageName = context.getPackageName();
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
