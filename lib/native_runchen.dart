@@ -135,15 +135,30 @@ class NativeRunchen {
     return success;
   }
 
-  // RFID-USB转串口开启串口
+  // RFID-USB转串口开启
   static Future<bool?> get RFIDOpen async {
-    final bool? success = await _methodchannel.invokeMethod('RFID.openAndroidUsbSerial');
+    final bool? success =
+        await _methodchannel.invokeMethod('RFID.openAndroidUsbSerial');
     return success;
   }
 
-  // RFID-USB转串口关闭串口
+  // RFID-USB转串口关闭
   static Future<bool?> get RFIDClose async {
-    final bool? success = await _methodchannel.invokeMethod('RFID.close');
+    final bool? success =
+        await _methodchannel.invokeMethod('RFID.closeAndroidUsbSerial');
+    return success;
+  }
+
+  // RFID-开始读取标签
+  static Future<bool?> RFIDStartRead(int? mode, int? timeout) async {
+    final bool? success = await _methodchannel
+        .invokeMethod('RFID.startRead', {"mode": mode, "timeout": timeout});
+    return success;
+  }
+
+  // RFID-停止读取标签
+  static Future<bool?> get RFIDStopRead async {
+    final bool? success = await _methodchannel.invokeMethod('RFID.stopRead');
     return success;
   }
 

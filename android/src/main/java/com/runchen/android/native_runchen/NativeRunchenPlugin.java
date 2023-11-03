@@ -115,11 +115,15 @@ public class NativeRunchenPlugin implements FlutterPlugin, MethodCallHandler, Ev
             boolean success = AppHelper.getInstance().openAppToFront();
             result.success(success);
         } else if (call.method.equals("RFID.openAndroidUsbSerial")) {
-            boolean success = RFIDManage.getInstance().openAndroidUsbSerial(AppHelper.getInstance().getContext());
-            result.success(success);
-        } else if (call.method.equals("RFID.close")) {
-            RFIDManage.getInstance().close();
-            result.success(true);
+            result.success(RFIDManage.getInstance().openAndroidUsbSerial(AppHelper.getInstance().getContext()));
+        } else if (call.method.equals("RFID.closeAndroidUsbSerial")) {
+            result.success(RFIDManage.getInstance().close());
+        } else if (call.method.equals("RFID.startRead")) {
+            int mode = call.argument("mode");
+            int timeout = call.argument("timeout");
+            result.success(RFIDManage.getInstance().startRead(mode, timeout));
+        } else if (call.method.equals("RFID.stopRead")) {
+            result.success(RFIDManage.getInstance().stopRead());
         } else {
             result.notImplemented();
         }
